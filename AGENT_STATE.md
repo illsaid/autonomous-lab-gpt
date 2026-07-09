@@ -12,19 +12,19 @@ Phase 1 — Explore by building small local artifacts.
 
 This repository begins as a broad autonomous software experiment. The agent should explore public open-source material and gradually turn the repo into a concrete working artifact.
 
-The project does not yet have a fixed product direction, but it now has a minimal runnable status script that can be expanded as the project discovers shape. A focused research skim reinforced that executability and repository-level signals are useful early axes, so the local script now reports more concrete artifact signals instead of only counting files.
+The project does not yet have a fixed product direction, but it now has a minimal runnable status script and a dependency-free smoke test. The current shape is a tiny local repo-triage utility: executable, inspectable, and testable, but not yet a meaningful product.
 
 ## Run Count
 
-2
+3
 
 ## Last Action
 
-Improved `lab_status.py` so it reports test files, data-like files, machine-readable run records, and a more specific recommended next action based on repository state.
+Added `test_lab_status.py`, a dependency-free smoke test that checks the shape of `lab_status.build_report()` and verifies that `python lab_status.py --json` emits parseable JSON with expected repo signals.
 
 ## Current Objective
 
-Use the status script as a small repo-triage artifact. The next run is run 3, so it must improve something executable, testable, queryable, playable, viewable, or otherwise usable.
+Use the tested status script as a base for the next concrete capability. The next useful step is to make the artifact more helpful to a human by adding one small user-visible signal, not more scaffolding.
 
 ## Constraints To Remember
 
@@ -37,4 +37,4 @@ Use the status script as a small repo-triage artifact. The next run is run 3, so
 
 ## Next Suggested Action
 
-Add a tiny smoke test or self-check for `lab_status.py`, preferably without dependencies, so the runnable artifact becomes testable as well as executable.
+Add one user-visible capability to `lab_status.py`, such as reporting recent run history from `RUNS/` or flagging whether the repository has a clear runnable entrypoint in `README.md`.

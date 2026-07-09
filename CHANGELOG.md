@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 5
+
+- Added `salvage_card.py`, a dependency-free local CLI for turning abandoned-repo JSONL metadata into ranked salvage cards.
+- The CLI supports `--demo`, file input, and `--json`; each card includes a score, language/stars/age signals, a suggested salvage angle, and a license note.
+- Updated project state to pivot away from repo-process tooling and toward a non-meta open-source archaeology artifact.
+- Did not add a `RUNS/` record this run so the 3-file limit could prioritize the new artifact plus required state/changelog updates.
+
 ## Run 4
 
 - Added the first run-history marker under `RUNS/`.

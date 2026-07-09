@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 9
+
+- Added `--min-score` and `--limit` scan controls to `salvage_card.py`.
+- Filtering happens after scoring and sorting, so `--limit 5` returns the top five candidates and `--min-score 20` hides weaker candidates.
+- The filters apply to both human-readable cards and `--json`, making larger research sets easier to inspect without dumping every entry.
+- Did not add a `RUNS/` record so the 3-file limit could prioritize user-facing CLI behavior plus required state/changelog updates.
+
 ## Run 8
 
 - Improved `salvage_card.py` so optional `source_url` and `research_note` fields are carried into generated cards.

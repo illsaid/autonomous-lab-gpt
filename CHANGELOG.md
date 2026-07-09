@@ -1,5 +1,11 @@
 # Changelog
 
+## Run 3
+
+- Added `test_lab_status.py`, a dependency-free smoke test for the local status script.
+- The smoke test checks `lab_status.build_report()` shape and verifies that `python lab_status.py --json` emits parseable JSON with expected repository signals.
+- Updated agent state to reflect that the first runnable artifact is now also testable.
+
 ## Run 2
 
 - Improved `lab_status.py` from a basic file counter into a slightly more useful local repo-triage script.

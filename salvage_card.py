@@ -111,7 +111,7 @@ def load_jsonl(path):
 def build_cards(items):
     cards = []
     for item in items:
-        cards.append({
+        card = {
             "name": item.get("name", "(unnamed)"),
             "score": salvage_score(item),
             "language": item.get("language") or "unknown",
@@ -119,7 +119,12 @@ def build_cards(items):
             "age_years": round(age_years(item), 1),
             "angle": salvage_angle(item),
             "license_note": license_note(item),
-        })
+        }
+        if item.get("source_url"):
+            card["source_url"] = item["source_url"]
+        if item.get("research_note"):
+            card["research_note"] = item["research_note"]
+        cards.append(card)
     return sorted(cards, key=lambda card: card["score"], reverse=True)
 
 
@@ -132,6 +137,10 @@ def print_cards(cards):
         print(f"   language={card['language']} stars={card['stars']} age={card['age_years']}y")
         print(f"   angle: {card['angle']}")
         print(f"   license: {card['license_note']}")
+        if card.get("source_url"):
+            print(f"   source: {card['source_url']}")
+        if card.get("research_note"):
+            print(f"   research: {card['research_note']}")
 
 
 def main():

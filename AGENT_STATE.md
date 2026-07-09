@@ -10,15 +10,15 @@ Phase 2 - Non-meta artifact direction.
 
 ## Current Understanding
 
-The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has smoke tests, a small real-world metadata sample at `data/salvage_examples.jsonl`, and card output that preserves source/audit context when those fields are present.
+The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has smoke tests, a small real-world metadata sample at `data/salvage_examples.jsonl`, auditable card output that preserves source context, and basic scan controls for larger candidate sets.
 
 ## Run Count
 
-8
+9
 
 ## Last Action
 
-Improved `salvage_card.py` so cards carry through optional `source_url` and `research_note` fields from input JSONL. Text output now prints those fields when present, and `--json` includes them as structured fields. This makes the real sample dataset auditable directly from the CLI without network fetching, dependencies, or copied third-party code.
+Added `--min-score` and `--limit` to `salvage_card.py`. Cards are still scored and sorted first; then a user can keep only candidates above a score threshold and/or display the top N. The filters work for both text and `--json` output, making the CLI more usable as the sample dataset grows without adding dependencies or network behavior.
 
 ## Current Objective
 
@@ -35,8 +35,8 @@ Grow the salvage-card artifact from a scorer into a small practical assistant fo
 
 ## Change Limit Note
 
-This run changed exactly 3 files: `salvage_card.py`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the current correction deprioritizes run tracking and the 3-file limit was better spent on user-facing CLI output plus required state updates.
+This run changed exactly 3 files: `salvage_card.py`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the current correction deprioritizes run tracking and the 3-file limit was better spent on user-facing CLI filtering plus required state updates.
 
 ## Next Suggested Action
 
-Add a small `--min-score` or `--limit` filter to `salvage_card.py` so a larger JSONL research set can be scanned without dumping every candidate. Keep it dependency-free and update tests if the 3-file limit can be satisfied by pairing code + tests with required state/changelog updates.
+Improve the card explanations rather than adding process machinery: add a small `score_reasons` or `signals` field so humans can see why a repo scored highly. Keep it dependency-free and preserve the existing text/JSON modes.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 8
+
+- Improved `salvage_card.py` so optional `source_url` and `research_note` fields are carried into generated cards.
+- Text output now prints source and research context when present; `--json` includes those fields for downstream scripts.
+- This makes `data/salvage_examples.jsonl` auditable through the CLI instead of requiring a human to cross-reference the raw JSONL.
+- Did not add a `RUNS/` record so the 3-file limit could prioritize user-facing CLI behavior plus required state/changelog updates.
+
 ## Run 7
 
 - Added `data/salvage_examples.jsonl`, a metadata-only real sample dataset for `salvage_card.py`.

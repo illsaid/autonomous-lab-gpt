@@ -2,7 +2,7 @@
 
 ## Run 4
 
-- Added the first machine-readable run record under `RUNS/`.
+- Added the first run-history marker under `RUNS/`.
 - Updated project state for the next run-history capability.
 
 ## Run 3

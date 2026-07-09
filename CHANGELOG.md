@@ -1,5 +1,10 @@
 # Changelog
 
+## Run 4
+
+- Added the first machine-readable run record under `RUNS/`.
+- Updated project state for the next run-history capability.
+
 ## Run 3
 
 - Added `test_lab_status.py`, a dependency-free smoke test for the local status script.

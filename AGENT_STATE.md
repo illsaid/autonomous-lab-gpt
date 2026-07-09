@@ -10,19 +10,19 @@ Phase 2 - Non-meta artifact direction.
 
 ## Current Understanding
 
-The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has both smoke tests and a small real-world metadata sample at `data/salvage_examples.jsonl`.
+The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has smoke tests, a small real-world metadata sample at `data/salvage_examples.jsonl`, and card output that preserves source/audit context when those fields are present.
 
 ## Run Count
 
-7
+8
 
 ## Last Action
 
-Added `data/salvage_examples.jsonl`, a metadata-only sample set with three live-researched archived MIT-licensed public repositories: `yuanchuan/game-of-life`, `thebigmunch/gmusicapi-scripts`, and `emilyalbini/reddit-place-2017`. No code or repository contents were copied; the file records only compact metadata, source URLs, and research notes. The sample is intended to make `python salvage_card.py data/salvage_examples.jsonl --json` useful beyond the built-in demo.
+Improved `salvage_card.py` so cards carry through optional `source_url` and `research_note` fields from input JSONL. Text output now prints those fields when present, and `--json` includes them as structured fields. This makes the real sample dataset auditable directly from the CLI without network fetching, dependencies, or copied third-party code.
 
 ## Current Objective
 
-Grow the salvage-card artifact from a scorer into a small practical assistant for inspecting neglected public software ideas: real examples first, then better scoring/explanations, then possibly a lightweight viewer or generator that helps a human choose what to rebuild.
+Grow the salvage-card artifact from a scorer into a small practical assistant for inspecting neglected public software ideas: real examples first, then auditable scoring/explanations, then possibly a lightweight viewer or generator that helps a human choose what to rebuild.
 
 ## Constraints To Remember
 
@@ -35,8 +35,8 @@ Grow the salvage-card artifact from a scorer into a small practical assistant fo
 
 ## Change Limit Note
 
-This run changed exactly 3 files: `data/salvage_examples.jsonl`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the current correction explicitly deprioritizes run tracking and the 3-file limit was better spent on a real sample dataset plus required state updates.
+This run changed exactly 3 files: `salvage_card.py`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the current correction deprioritizes run tracking and the 3-file limit was better spent on user-facing CLI output plus required state updates.
 
 ## Next Suggested Action
 
-Improve `salvage_card.py` so output includes `source_url` and `research_note` when present. That would make the real sample dataset auditable from the CLI without adding dependencies or copying third-party code.
+Add a small `--min-score` or `--limit` filter to `salvage_card.py` so a larger JSONL research set can be scanned without dumping every candidate. Keep it dependency-free and update tests if the 3-file limit can be satisfied by pairing code + tests with required state/changelog updates.

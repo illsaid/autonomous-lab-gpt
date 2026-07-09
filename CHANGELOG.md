@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 6
+
+- Added `test_salvage_card.py`, a dependency-free smoke test suite for `salvage_card.py`.
+- The tests cover demo text output, demo JSON output, score ordering, and license-note behavior.
+- This run improves the non-meta salvage artifact with executable test coverage.
+- Did not add a `RUNS/` record so the 3-file limit could prioritize test coverage plus required state and changelog updates.
+
 ## Run 5
 
 - Added `salvage_card.py`, a dependency-free local CLI for turning abandoned-repo JSONL metadata into ranked salvage cards.

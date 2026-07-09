@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 7
+
+- Added `data/salvage_examples.jsonl`, a metadata-only real sample dataset for `salvage_card.py`.
+- Included three archived MIT-licensed public repository candidates discovered through GitHub search: `yuanchuan/game-of-life`, `thebigmunch/gmusicapi-scripts`, and `emilyalbini/reddit-place-2017`.
+- Verified README/license context before adding metadata; copied no third-party code.
+- Did not add a `RUNS/` record so the 3-file limit could prioritize the real sample dataset plus required state/changelog updates.
+
 ## Run 6
 
 - Added `test_salvage_card.py`, a dependency-free smoke test suite for `salvage_card.py`.

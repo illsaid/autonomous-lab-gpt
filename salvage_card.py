@@ -9,6 +9,7 @@ Usage:
     python salvage_card.py --demo
     python salvage_card.py repos.jsonl
     python salvage_card.py repos.jsonl --json
+    python salvage_card.py repos.jsonl --min-score 20 --limit 5
 """
 
 import argparse
@@ -128,6 +129,14 @@ def build_cards(items):
     return sorted(cards, key=lambda card: card["score"], reverse=True)
 
 
+def filter_cards(cards, min_score=None, limit=None):
+    if min_score is not None:
+        cards = [card for card in cards if card["score"] >= min_score]
+    if limit is not None:
+        cards = cards[:limit]
+    return cards
+
+
 def print_cards(cards):
     if not cards:
         print("No salvage candidates found.")
@@ -148,7 +157,12 @@ def main():
     parser.add_argument("input", nargs="?", help="JSONL file of repository metadata")
     parser.add_argument("--demo", action="store_true", help="run against built-in example metadata")
     parser.add_argument("--json", action="store_true", help="emit JSON instead of text cards")
+    parser.add_argument("--min-score", type=float, help="only show cards with this score or higher")
+    parser.add_argument("--limit", type=int, help="only show the top N cards after scoring and filtering")
     args = parser.parse_args()
+
+    if args.limit is not None and args.limit < 1:
+        parser.error("--limit must be at least 1")
 
     if args.demo:
         items = DEMO_ITEMS
@@ -157,7 +171,7 @@ def main():
     else:
         parser.error("provide a JSONL input file or use --demo")
 
-    cards = build_cards(items)
+    cards = filter_cards(build_cards(items), min_score=args.min_score, limit=args.limit)
     if args.json:
         print(json.dumps(cards, indent=2, sort_keys=True))
     else:

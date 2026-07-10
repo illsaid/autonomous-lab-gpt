@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 16
+
+- Added deterministic `prototype_name` generation to `salvage_card.py` cards.
+- Plain-text `--brief` output now prints `Next prototype name` for the top candidate.
+- Markdown `--brief-md` output now includes a backticked `Next prototype name` field for reuse in issues, folders, branches, or build notes.
+- No `RUNS/` record was added; the 3-file limit was reserved for user-facing CLI behavior plus required state/changelog updates.
+
 ## Run 15
 
 - Expanded `test_salvage_card.py` coverage for the newer Markdown brief behavior.

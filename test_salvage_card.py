@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Smoke tests for the salvage_card CLI."""
 
+import csv
 import json
 import subprocess
 import sys
 import unittest
+from io import StringIO
 from pathlib import Path
 
 import salvage_card
@@ -39,6 +41,40 @@ class SalvageCardTests(unittest.TestCase):
         scores = [card["score"] for card in cards]
         self.assertEqual(scores, sorted(scores, reverse=True))
         self.assertTrue({"name", "score", "angle", "license_note", "prototype_name"}.issubset(cards[0]))
+
+    def test_demo_csv_has_review_queue_columns(self):
+        result = self.run_cli("--demo", "--csv")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        rows = list(csv.DictReader(StringIO(result.stdout)))
+        self.assertGreaterEqual(len(rows), 2)
+        self.assertEqual(
+            list(rows[0].keys()),
+            [
+                "rank",
+                "name",
+                "score",
+                "prototype_name",
+                "language",
+                "stars",
+                "age_years",
+                "angle",
+                "license_note",
+                "signals",
+                "source_url",
+                "research_note",
+            ],
+        )
+        self.assertEqual(rows[0]["rank"], "1")
+        self.assertTrue(rows[0]["prototype_name"].endswith("-rebuild"))
+        self.assertIn(" | ", rows[0]["signals"])
+
+    def test_topic_filtered_csv_limits_demo_rows(self):
+        result = self.run_cli("--demo", "--topic", "simulation", "--csv")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        rows = list(csv.DictReader(StringIO(result.stdout)))
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["name"], "demo/tiny-sim")
+        self.assertEqual(rows[0]["prototype_name"], "tiny-sim-rebuild")
 
     def test_topic_filter_limits_demo_results(self):
         result = self.run_cli("--demo", "--topic", "simulation", "--json")
@@ -79,6 +115,11 @@ class SalvageCardTests(unittest.TestCase):
 
     def test_output_modes_are_mutually_exclusive(self):
         result = self.run_cli("--demo", "--ticket", "--json")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("choose only one output mode", result.stderr)
+
+    def test_csv_conflicts_with_other_output_modes(self):
+        result = self.run_cli("--demo", "--csv", "--json")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("choose only one output mode", result.stderr)
 

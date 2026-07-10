@@ -1,5 +1,13 @@
 # Changelog
 
+## Run 12
+
+- Added `--brief` mode to `salvage_card.py` so the tool can turn the top matching candidate into a compact rebuild brief instead of only listing ranked cards.
+- Brief output includes the candidate problem, reusable shape, first build step, license note, short scoring rationale, and source/research context when present.
+- Added `description` to generated card data so JSON consumers and brief output preserve the original repository description.
+- `--brief` is intentionally human-readable and rejects `--json` to avoid mixing output modes.
+- Did not add a `RUNS/` record so the 3-file limit could prioritize user-facing CLI behavior plus required state/changelog updates.
+
 ## Run 11
 
 - Added a `--topic` filter to `salvage_card.py` so users can narrow candidates by text before scoring.

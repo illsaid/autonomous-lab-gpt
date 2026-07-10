@@ -38,7 +38,7 @@ class SalvageCardTests(unittest.TestCase):
         self.assertGreaterEqual(len(cards), 2)
         scores = [card["score"] for card in cards]
         self.assertEqual(scores, sorted(scores, reverse=True))
-        self.assertTrue({"name", "score", "angle", "license_note"}.issubset(cards[0]))
+        self.assertTrue({"name", "score", "angle", "license_note", "prototype_name"}.issubset(cards[0]))
 
     def test_topic_filter_limits_demo_results(self):
         result = self.run_cli("--demo", "--topic", "simulation", "--json")
@@ -46,11 +46,13 @@ class SalvageCardTests(unittest.TestCase):
         cards = json.loads(result.stdout)
         self.assertEqual(len(cards), 1)
         self.assertEqual(cards[0]["name"], "demo/tiny-sim")
+        self.assertEqual(cards[0]["prototype_name"], "tiny-sim-rebuild")
 
     def test_brief_outputs_rebuild_guidance(self):
         result = self.run_cli("--demo", "--topic", "simulation", "--brief")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("Rebuild brief: demo/tiny-sim", result.stdout)
+        self.assertIn("Next prototype name: tiny-sim-rebuild", result.stdout)
         self.assertIn("First build step:", result.stdout)
         self.assertIn("Why this candidate:", result.stdout)
 
@@ -58,6 +60,7 @@ class SalvageCardTests(unittest.TestCase):
         result = self.run_cli("--demo", "--topic", "simulation", "--brief-md")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("# Rebuild brief: demo/tiny-sim", result.stdout)
+        self.assertIn("**Next prototype name:** `tiny-sim-rebuild`", result.stdout)
         self.assertIn("## Reusable shape", result.stdout)
         self.assertIn("## First build step", result.stdout)
         self.assertIn("- ", result.stdout)
@@ -70,6 +73,9 @@ class SalvageCardTests(unittest.TestCase):
     def test_license_note_warns_for_unclear_rights(self):
         note = salvage_card.license_note({"license": "unknown"})
         self.assertIn("study the idea only", note)
+
+    def test_prototype_name_falls_back_when_name_is_empty(self):
+        self.assertEqual(salvage_card.prototype_name({"name": "///"}), "salvage-candidate-rebuild")
 
 
 if __name__ == "__main__":

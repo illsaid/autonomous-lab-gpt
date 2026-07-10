@@ -71,6 +71,51 @@ def salvage_score(item):
     return round(age_score + star_score + license_score + archive_score + topic_score + description_score, 2)
 
 
+def score_signals(item):
+    signals = []
+    years = age_years(item)
+    if years >= 8:
+        signals.append(f"old enough to be neglected ({years:.1f} years since last push)")
+    elif years >= 3:
+        signals.append(f"some dormancy signal ({years:.1f} years since last push)")
+    elif years:
+        signals.append(f"recent enough that abandonment is less clear ({years:.1f} years since last push)")
+    else:
+        signals.append("missing or invalid pushed_at date")
+
+    stars = item.get("stars") or 0
+    if stars >= 150:
+        signals.append(f"strong prior interest ({stars} stars)")
+    elif stars >= 25:
+        signals.append(f"some prior interest ({stars} stars)")
+    else:
+        signals.append(f"low visible demand ({stars} stars)")
+
+    license_name = item.get("license") or "unknown"
+    if license_name in PERMISSIVE_LICENSES:
+        signals.append(f"permissive license ({license_name})")
+    else:
+        signals.append(f"license needs caution ({license_name})")
+
+    if item.get("archived"):
+        signals.append("explicitly archived")
+    else:
+        signals.append("not marked archived")
+
+    topics = item.get("topics") or []
+    if topics:
+        signals.append(f"tagged shape: {', '.join(str(topic) for topic in topics[:4])}")
+    else:
+        signals.append("no topics supplied")
+
+    if item.get("description"):
+        signals.append("has a usable description")
+    else:
+        signals.append("missing description")
+
+    return signals
+
+
 def salvage_angle(item):
     text = " ".join(
         str(part).lower()
@@ -115,6 +160,7 @@ def build_cards(items):
         card = {
             "name": item.get("name", "(unnamed)"),
             "score": salvage_score(item),
+            "signals": score_signals(item),
             "language": item.get("language") or "unknown",
             "stars": item.get("stars") or 0,
             "age_years": round(age_years(item), 1),
@@ -144,6 +190,7 @@ def print_cards(cards):
     for index, card in enumerate(cards, start=1):
         print(f"#{index} {card['name']}  score={card['score']}")
         print(f"   language={card['language']} stars={card['stars']} age={card['age_years']}y")
+        print(f"   signals: {'; '.join(card['signals'])}")
         print(f"   angle: {card['angle']}")
         print(f"   license: {card['license_note']}")
         if card.get("source_url"):

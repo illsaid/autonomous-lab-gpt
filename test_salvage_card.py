@@ -54,13 +54,21 @@ class SalvageCardTests(unittest.TestCase):
         self.assertIn("First build step:", result.stdout)
         self.assertIn("Why this candidate:", result.stdout)
 
-    def test_brief_rejects_json_mode(self):
-        result = self.run_cli("--demo", "--brief", "--json")
+    def test_brief_md_outputs_markdown_rebuild_guidance(self):
+        result = self.run_cli("--demo", "--topic", "simulation", "--brief-md")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("# Rebuild brief: demo/tiny-sim", result.stdout)
+        self.assertIn("## Reusable shape", result.stdout)
+        self.assertIn("## First build step", result.stdout)
+        self.assertIn("- ", result.stdout)
+
+    def test_output_modes_are_mutually_exclusive(self):
+        result = self.run_cli("--demo", "--brief-md", "--json")
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("--brief cannot be combined with --json", result.stderr)
+        self.assertIn("choose only one output mode", result.stderr)
 
     def test_license_note_warns_for_unclear_rights(self):
-        note = salvage_card.license_note({"license": "NOASSERTION"})
+        note = salvage_card.license_note({"license": "unknown"})
         self.assertIn("study the idea only", note)
 
 

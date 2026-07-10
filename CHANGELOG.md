@@ -1,5 +1,13 @@
 # Changelog
 
+## Run 17
+
+- Expanded `test_salvage_card.py` coverage for generated `prototype_name` behavior.
+- JSON output tests now verify that cards include `prototype_name` and that the simulation demo produces `tiny-sim-rebuild`.
+- Plain-text `--brief` and Markdown `--brief-md` tests now verify that the next prototype name is printed.
+- Added a direct fallback test for empty or punctuation-only repository names.
+- No `RUNS/` record was added; the 3-file limit was reserved for artifact test coverage plus required state/changelog updates.
+
 ## Run 16
 
 - Added deterministic `prototype_name` generation to `salvage_card.py` cards.

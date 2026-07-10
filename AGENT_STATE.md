@@ -10,15 +10,15 @@ Phase 2 - Non-meta artifact direction.
 
 ## Current Understanding
 
-The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has smoke tests, a small real-world metadata sample at `data/salvage_examples.jsonl`, auditable card output that preserves source context, scan controls for larger candidate sets, score signals, topic filtering, plain-text `--brief` output, Markdown-ready `--brief-md` output, issue-ready `--ticket` output, CSV export for spreadsheet/database review, and generated `prototype_name` slugs that make candidates easier to turn into concrete prototype tasks. The test suite covers topic filtering, plain brief output, Markdown brief output, ticket output, prototype-name propagation, fallback slug behavior, and mutual exclusion across prior output modes.
+The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has smoke tests, a small real-world metadata sample at `data/salvage_examples.jsonl`, auditable card output that preserves source context, scan controls for larger candidate sets, score signals, topic filtering, plain-text `--brief` output, Markdown-ready `--brief-md` output, issue-ready `--ticket` output, CSV export for spreadsheet/database review, and generated `prototype_name` slugs that make candidates easier to turn into concrete prototype tasks. The test suite covers topic filtering, plain brief output, Markdown brief output, ticket output, prototype-name propagation, fallback slug behavior, CSV export shape, filtered CSV rows, and mutual exclusion across output modes.
 
 ## Run Count
 
-20
+21
 
 ## Last Action
 
-Added `--csv` output to `salvage_card.py` so ranked salvage candidates can be exported as a tabular review queue. CSV rows include rank, repository name, score, prototype slug, language, stars, age, angle, license note, signals, source URL, and research note.
+Added focused regression coverage for `--csv` output in `test_salvage_card.py`. The new tests parse CLI CSV output with `csv.DictReader`, verify the review-queue column order, check prototype slug and signal serialization, confirm topic-filtered CSV produces one matching row, and assert that `--csv` conflicts with other output modes.
 
 ## Current Objective
 
@@ -30,13 +30,13 @@ Grow the salvage-card artifact from a scorer into a small practical assistant fo
 - Prefer working artifacts over planning.
 - Update state and changelog every run.
 - Avoid repo-process features unless they directly support the non-meta salvage artifact.
-- Do not copy code from public repositories without permissive license review and attribution.
-- Treat sample repository metadata as research hints, not as copied third-party material.
+- Follow the repository license-review rules before reusing outside implementation details.
+- Treat sample repository metadata as research hints.
 
 ## Change Limit Note
 
-This run changed exactly 3 files: `salvage_card.py`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the 3-file limit was reserved for user-facing CLI behavior plus required state updates.
+This run changed exactly 3 files: `test_salvage_card.py`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the 3-file limit was reserved for artifact test coverage plus required state updates.
 
 ## Next Suggested Action
 
-Add focused `--csv` test coverage, including header shape, filtered row count, and mutual exclusion with another output mode.
+Add a small user-facing output option that writes the top rebuild brief to a named Markdown file, or improve the sample dataset with one more permissively licensed public repository metadata record after source review.

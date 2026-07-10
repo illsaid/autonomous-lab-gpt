@@ -1,5 +1,11 @@
 # Changelog
 
+## Run 22
+
+- Added `salvage_brief_file.py`, a companion CLI that writes the top matching salvage candidate to a reusable Markdown brief file.
+- Supports `--demo`, JSONL input, `--topic`, `--min-score`, and optional `--output`; defaults to `<prototype_name>.md` when no output path is supplied.
+- No `RUNS/` record was added; the 3-file limit was reserved for user-facing file-output behavior plus required state/changelog updates.
+
 ## Run 21
 
 - Expanded `test_salvage_card.py` coverage for `--csv` output.

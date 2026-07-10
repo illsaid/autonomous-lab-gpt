@@ -171,6 +171,16 @@ def first_build_step(card):
     return "Write the smallest fresh prototype that proves the reusable behavior still matters."
 
 
+def prototype_name(card):
+    raw_name = card.get("name") or "salvage-candidate"
+    repo_name = raw_name.rsplit("/", 1)[-1]
+    slug = "".join(char.lower() if char.isalnum() else "-" for char in repo_name).strip("-")
+    slug = "-".join(part for part in slug.split("-") if part)
+    if not slug:
+        slug = "salvage-candidate"
+    return f"{slug}-rebuild"
+
+
 def load_jsonl(path):
     items = []
     with Path(path).open(encoding="utf-8") as handle:
@@ -198,6 +208,7 @@ def build_cards(items):
             "angle": salvage_angle(item),
             "license_note": license_note(item),
         }
+        card["prototype_name"] = prototype_name(card)
         if item.get("source_url"):
             card["source_url"] = item["source_url"]
         if item.get("research_note"):
@@ -243,6 +254,7 @@ def print_brief(cards):
     card = cards[0]
     print(f"Rebuild brief: {card['name']}")
     print(f"Score: {card['score']} ({card['language']}, {card['stars']} stars, {card['age_years']}y old)")
+    print(f"Next prototype name: {card['prototype_name']}")
     print(f"Problem: {card['description']}")
     print(f"Reusable shape: {card['angle']}")
     print(f"First build step: {first_build_step(card)}")
@@ -262,6 +274,8 @@ def print_brief_markdown(cards):
     print(f"# Rebuild brief: {card['name']}")
     print()
     print(f"**Score:** {card['score']} ({card['language']}, {card['stars']} stars, {card['age_years']}y old)")
+    print()
+    print(f"**Next prototype name:** `{card['prototype_name']}`")
     print()
     print(f"## Problem")
     print(card["description"])

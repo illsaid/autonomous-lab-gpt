@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 20
+
+- Added `--csv` output to `salvage_card.py` for spreadsheet-friendly salvage candidate review.
+- CSV output includes rank, name, score, prototype name, language, stars, age, angle, license note, signals, source URL, and research note.
+- Updated output-mode conflict handling so `--csv` cannot be combined with `--json`, `--brief`, `--brief-md`, or `--ticket`.
+- No `RUNS/` record was added; the 3-file limit was reserved for user-facing CLI behavior plus required state/changelog updates.
+
 ## Run 19
 
 - Expanded `test_salvage_card.py` coverage for `--ticket` output.

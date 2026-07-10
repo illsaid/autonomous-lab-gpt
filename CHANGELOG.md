@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 10
+
+- Added `score_signals()` to `salvage_card.py` so rankings now explain themselves instead of only returning a number.
+- Each card now includes a `signals` array in `--json` output and a readable `signals:` line in text output.
+- Signals cover dormancy, star interest, license posture, archive status, topic shape, and description availability.
+- Did not add a `RUNS/` record so the 3-file limit could prioritize user-facing CLI explainability plus required state/changelog updates.
+
 ## Run 9
 
 - Added `--min-score` and `--limit` scan controls to `salvage_card.py`.
@@ -57,7 +64,6 @@
 
 - Added `lab_status.py`, the first runnable local artifact.
 - The script reports repository file count, missing required files, runnable Python files, and a recommended next action.
-- Updated agent state to move from pure bootstrap into small artifact iteration.
 
 ## Bootstrap
 

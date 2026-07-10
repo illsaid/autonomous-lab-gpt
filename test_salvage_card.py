@@ -65,8 +65,20 @@ class SalvageCardTests(unittest.TestCase):
         self.assertIn("## First build step", result.stdout)
         self.assertIn("- ", result.stdout)
 
+    def test_ticket_outputs_issue_ready_prototype_task(self):
+        result = self.run_cli("--demo", "--topic", "simulation", "--ticket")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Title: Prototype tiny-sim-rebuild", result.stdout)
+        self.assertIn("Goal:", result.stdout)
+        self.assertIn("Start here:", result.stdout)
+        self.assertIn("Acceptance checks:", result.stdout)
+        self.assertIn("- Runs locally without external services", result.stdout)
+        self.assertIn("- Uses fresh implementation, not copied source code", result.stdout)
+        self.assertIn("Context:", result.stdout)
+        self.assertIn("- Source candidate: demo/tiny-sim", result.stdout)
+
     def test_output_modes_are_mutually_exclusive(self):
-        result = self.run_cli("--demo", "--brief-md", "--json")
+        result = self.run_cli("--demo", "--ticket", "--json")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("choose only one output mode", result.stderr)
 

@@ -10,6 +10,7 @@ Usage:
     python salvage_card.py repos.jsonl
     python salvage_card.py repos.jsonl --json
     python salvage_card.py repos.jsonl --min-score 20 --limit 5
+    python salvage_card.py repos.jsonl --topic simulation
 """
 
 import argparse
@@ -116,11 +117,25 @@ def score_signals(item):
     return signals
 
 
+def searchable_text(item):
+    parts = [
+        item.get("name", ""),
+        item.get("description", ""),
+        item.get("language", ""),
+        " ".join(str(topic) for topic in item.get("topics") or []),
+    ]
+    return " ".join(str(part).lower() for part in parts if part)
+
+
+def matches_topic(item, topic):
+    if not topic:
+        return True
+    needle = topic.lower()
+    return needle in searchable_text(item)
+
+
 def salvage_angle(item):
-    text = " ".join(
-        str(part).lower()
-        for part in [item.get("name", ""), item.get("description", ""), item.get("language", ""), " ".join(item.get("topics") or [])]
-    )
+    text = searchable_text(item)
     if any(word in text for word in ["game", "canvas", "simulation"]):
         return "Extract the loop; rebuild it as a tiny modern playable prototype."
     if any(word in text for word in ["map", "geo", "location", "route"]):
@@ -175,6 +190,12 @@ def build_cards(items):
     return sorted(cards, key=lambda card: card["score"], reverse=True)
 
 
+def filter_items(items, topic=None):
+    if topic:
+        items = [item for item in items if matches_topic(item, topic)]
+    return items
+
+
 def filter_cards(cards, min_score=None, limit=None):
     if min_score is not None:
         cards = [card for card in cards if card["score"] >= min_score]
@@ -206,6 +227,7 @@ def main():
     parser.add_argument("--json", action="store_true", help="emit JSON instead of text cards")
     parser.add_argument("--min-score", type=float, help="only show cards with this score or higher")
     parser.add_argument("--limit", type=int, help="only show the top N cards after scoring and filtering")
+    parser.add_argument("--topic", help="only score candidates whose name, description, language, or topics match this text")
     args = parser.parse_args()
 
     if args.limit is not None and args.limit < 1:
@@ -218,7 +240,7 @@ def main():
     else:
         parser.error("provide a JSONL input file or use --demo")
 
-    cards = filter_cards(build_cards(items), min_score=args.min_score, limit=args.limit)
+    cards = filter_cards(build_cards(filter_items(items, topic=args.topic)), min_score=args.min_score, limit=args.limit)
     if args.json:
         print(json.dumps(cards, indent=2, sort_keys=True))
     else:

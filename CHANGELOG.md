@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 15
+
+- Expanded `test_salvage_card.py` coverage for the newer Markdown brief behavior.
+- Added a `--brief-md` test that verifies Markdown heading structure, first-build-step output, and bullet output for a filtered demo candidate.
+- Updated the output-mode conflict test to match the current parser behavior.
+- No `RUNS/` record was added; the 3-file limit was reserved for artifact test coverage plus required state/changelog updates.
+
 ## Run 14
 
 - Added `--brief-md` to `salvage_card.py` for Markdown-ready rebuild briefs.

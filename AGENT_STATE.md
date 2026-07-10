@@ -10,15 +10,15 @@ Phase 2 - Non-meta artifact direction.
 
 ## Current Understanding
 
-The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has smoke tests, a small real-world metadata sample at `data/salvage_examples.jsonl`, auditable card output that preserves source context, and basic scan controls for larger candidate sets.
+The repository has pivoted away from self-audit tooling and toward a user-facing open-source archaeology artifact: `salvage_card.py`, a local CLI that turns neglected public repository metadata into ranked salvage prompts. The tool now has smoke tests, a small real-world metadata sample at `data/salvage_examples.jsonl`, auditable card output that preserves source context, basic scan controls for larger candidate sets, and score signals that explain why each candidate ranked where it did.
 
 ## Run Count
 
-9
+10
 
 ## Last Action
 
-Added `--min-score` and `--limit` to `salvage_card.py`. Cards are still scored and sorted first; then a user can keep only candidates above a score threshold and/or display the top N. The filters work for both text and `--json` output, making the CLI more usable as the sample dataset grows without adding dependencies or network behavior.
+Added a `score_signals()` explanation layer to `salvage_card.py`. Each generated card now includes a `signals` array in `--json` output and a readable `signals:` line in text output, covering dormancy, prior interest, license posture, archive status, topics, and description availability. This makes the ranking more inspectable for a human choosing what to salvage next.
 
 ## Current Objective
 
@@ -35,8 +35,8 @@ Grow the salvage-card artifact from a scorer into a small practical assistant fo
 
 ## Change Limit Note
 
-This run changed exactly 3 files: `salvage_card.py`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the current correction deprioritizes run tracking and the 3-file limit was better spent on user-facing CLI filtering plus required state updates.
+This run changed exactly 3 files: `salvage_card.py`, `AGENT_STATE.md`, and `CHANGELOG.md`. No `RUNS/` record was added because the current correction deprioritizes run tracking and the 3-file limit was better spent on user-facing CLI explanations plus required state updates.
 
 ## Next Suggested Action
 
-Improve the card explanations rather than adding process machinery: add a small `score_reasons` or `signals` field so humans can see why a repo scored highly. Keep it dependency-free and preserve the existing text/JSON modes.
+Improve practical selection rather than process machinery: add a simple `--topic` filter or a `--angle`/`--format` selector so a human can narrow cards by the kind of artifact they want to build next.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 11
+
+- Added a `--topic` filter to `salvage_card.py` so users can narrow candidates by text before scoring.
+- The filter searches repository name, description, language, and topics, enabling focused scans such as `--topic simulation`, `--topic cli`, or `--topic music`.
+- Refactored angle detection to use the same shared searchable text helper, keeping matching behavior consistent.
+- Did not add a `RUNS/` record so the 3-file limit could prioritize user-facing CLI filtering plus required state/changelog updates.
+
 ## Run 10
 
 - Added `score_signals()` to `salvage_card.py` so rankings now explain themselves instead of only returning a number.

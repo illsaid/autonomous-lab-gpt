@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 19
+
+- Expanded `test_salvage_card.py` coverage for `--ticket` output.
+- Added assertions for issue-ready ticket structure: title, goal, start step, acceptance checks, local/no-copy safeguards, context, and filtered source candidate.
+- Updated output-mode conflict coverage to verify `--ticket` cannot be combined with `--json`.
+- No `RUNS/` record was added; the 3-file limit was reserved for artifact test coverage plus required state/changelog updates.
+
 ## Run 18
 
 - Added `--ticket` mode to `salvage_card.py` for issue-ready prototype tickets.

@@ -9,6 +9,7 @@ Usage:
     python salvage_card.py --demo
     python salvage_card.py repos.jsonl
     python salvage_card.py repos.jsonl --json
+    python salvage_card.py repos.jsonl --csv
     python salvage_card.py repos.jsonl --min-score 20 --limit 5
     python salvage_card.py repos.jsonl --topic simulation
     python salvage_card.py repos.jsonl --topic simulation --brief
@@ -17,7 +18,9 @@ Usage:
 """
 
 import argparse
+import csv
 import json
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -248,6 +251,42 @@ def print_cards(cards):
             print(f"   research: {card['research_note']}")
 
 
+def print_csv(cards):
+    fieldnames = [
+        "rank",
+        "name",
+        "score",
+        "prototype_name",
+        "language",
+        "stars",
+        "age_years",
+        "angle",
+        "license_note",
+        "signals",
+        "source_url",
+        "research_note",
+    ]
+    writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
+    writer.writeheader()
+    for rank, card in enumerate(cards, start=1):
+        writer.writerow(
+            {
+                "rank": rank,
+                "name": card["name"],
+                "score": card["score"],
+                "prototype_name": card["prototype_name"],
+                "language": card["language"],
+                "stars": card["stars"],
+                "age_years": card["age_years"],
+                "angle": card["angle"],
+                "license_note": card["license_note"],
+                "signals": " | ".join(card["signals"]),
+                "source_url": card.get("source_url", ""),
+                "research_note": card.get("research_note", ""),
+            }
+        )
+
+
 def print_brief(cards):
     if not cards:
         print("No salvage candidates found.")
@@ -337,6 +376,7 @@ def main():
     parser.add_argument("input", nargs="?", help="JSONL file of repository metadata")
     parser.add_argument("--demo", action="store_true", help="run against built-in example metadata")
     parser.add_argument("--json", action="store_true", help="emit JSON instead of text cards")
+    parser.add_argument("--csv", action="store_true", help="emit CSV instead of text cards")
     parser.add_argument("--brief", action="store_true", help="emit a compact rebuild brief for the top matching candidate")
     parser.add_argument("--brief-md", action="store_true", help="emit a Markdown rebuild brief for the top matching candidate")
     parser.add_argument("--ticket", action="store_true", help="emit an issue-ready prototype ticket for the top matching candidate")
@@ -347,8 +387,8 @@ def main():
 
     if args.limit is not None and args.limit < 1:
         parser.error("--limit must be at least 1")
-    if sum(bool(flag) for flag in [args.json, args.brief, args.brief_md, args.ticket]) > 1:
-        parser.error("choose only one output mode: --json, --brief, --brief-md, or --ticket")
+    if sum(bool(flag) for flag in [args.json, args.csv, args.brief, args.brief_md, args.ticket]) > 1:
+        parser.error("choose only one output mode: --json, --csv, --brief, --brief-md, or --ticket")
 
     if args.demo:
         items = DEMO_ITEMS
@@ -360,6 +400,8 @@ def main():
     cards = filter_cards(build_cards(filter_items(items, topic=args.topic)), min_score=args.min_score, limit=args.limit)
     if args.json:
         print(json.dumps(cards, indent=2, sort_keys=True))
+    elif args.csv:
+        print_csv(cards)
     elif args.brief:
         print_brief(cards)
     elif args.brief_md:

@@ -1,5 +1,11 @@
 # Changelog
 
+## Run 21
+
+- Expanded `test_salvage_card.py` coverage for `--csv` output.
+- Added assertions for CSV header shape, row parsing, prototype slug serialization, signal serialization, topic-filtered row count, and `--csv` output-mode conflicts.
+- No `RUNS/` record was added; the 3-file limit was reserved for artifact test coverage plus required state/changelog updates.
+
 ## Run 20
 
 - Added `--csv` output to `salvage_card.py` for spreadsheet-friendly salvage candidate review.

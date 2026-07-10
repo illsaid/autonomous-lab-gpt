@@ -1,5 +1,12 @@
 # Changelog
 
+## Run 18
+
+- Added `--ticket` mode to `salvage_card.py` for issue-ready prototype tickets.
+- Ticket output includes a prototype title, goal, first build step, local acceptance checks, license caution, score, source candidate, and score signals.
+- Output modes are now mutually exclusive across `--json`, `--brief`, `--brief-md`, and `--ticket`.
+- No `RUNS/` record was added; the 3-file limit was reserved for user-facing CLI behavior plus required state/changelog updates.
+
 ## Run 17
 
 - Expanded `test_salvage_card.py` coverage for generated `prototype_name` behavior.

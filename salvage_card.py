@@ -12,6 +12,7 @@ Usage:
     python salvage_card.py repos.jsonl --min-score 20 --limit 5
     python salvage_card.py repos.jsonl --topic simulation
     python salvage_card.py repos.jsonl --topic simulation --brief
+    python salvage_card.py repos.jsonl --topic simulation --brief-md
 """
 
 import argparse
@@ -253,12 +254,45 @@ def print_brief(cards):
         print(f"Research note: {card['research_note']}")
 
 
+def print_brief_markdown(cards):
+    if not cards:
+        print("No salvage candidates found.")
+        return
+    card = cards[0]
+    print(f"# Rebuild brief: {card['name']}")
+    print()
+    print(f"**Score:** {card['score']} ({card['language']}, {card['stars']} stars, {card['age_years']}y old)")
+    print()
+    print(f"## Problem")
+    print(card["description"])
+    print()
+    print(f"## Reusable shape")
+    print(card["angle"])
+    print()
+    print(f"## First build step")
+    print(first_build_step(card))
+    print()
+    print(f"## License caution")
+    print(card["license_note"])
+    print()
+    print(f"## Why this candidate")
+    for signal in card["signals"][:3]:
+        print(f"- {signal}")
+    if card.get("source_url"):
+        print()
+        print(f"**Source:** {card['source_url']}")
+    if card.get("research_note"):
+        print()
+        print(f"**Research note:** {card['research_note']}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate salvage cards from abandoned-repo JSONL metadata.")
     parser.add_argument("input", nargs="?", help="JSONL file of repository metadata")
     parser.add_argument("--demo", action="store_true", help="run against built-in example metadata")
     parser.add_argument("--json", action="store_true", help="emit JSON instead of text cards")
     parser.add_argument("--brief", action="store_true", help="emit a compact rebuild brief for the top matching candidate")
+    parser.add_argument("--brief-md", action="store_true", help="emit a Markdown rebuild brief for the top matching candidate")
     parser.add_argument("--min-score", type=float, help="only show cards with this score or higher")
     parser.add_argument("--limit", type=int, help="only show the top N cards after scoring and filtering")
     parser.add_argument("--topic", help="only score candidates whose name, description, language, or topics match this text")
@@ -266,8 +300,8 @@ def main():
 
     if args.limit is not None and args.limit < 1:
         parser.error("--limit must be at least 1")
-    if args.brief and args.json:
-        parser.error("--brief cannot be combined with --json")
+    if sum(bool(flag) for flag in [args.json, args.brief, args.brief_md]) > 1:
+        parser.error("choose only one output mode: --json, --brief, or --brief-md")
 
     if args.demo:
         items = DEMO_ITEMS
@@ -281,6 +315,8 @@ def main():
         print(json.dumps(cards, indent=2, sort_keys=True))
     elif args.brief:
         print_brief(cards)
+    elif args.brief_md:
+        print_brief_markdown(cards)
     else:
         print_cards(cards)
 
